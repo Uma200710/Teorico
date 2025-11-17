@@ -1,224 +1,143 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Simulador Parcial — Práctico (Separado)</title>
-<style>
-  :root{--bg:#071227;--card:#071625;--accent:#7dd3fc;--muted:#9fbfd8;color-scheme:dark}
-  html,body{height:100%;margin:0;font-family:Inter,system-ui; background:var(--bg); color:#e9f7ff}
-  header{padding:12px 20px;background:#061224;display:flex;justify-content:space-between;align-items:center}
-  header h1{margin:0;font-size:1.05rem}
-  main{padding:20px;display:flex;justify-content:center}
-  .wrap{width:100%;max-width:1100px}
-  .card{background:var(--card);padding:20px;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
-  .slide{padding:14px;border-radius:8px;background:rgba(255,255,255,.02)}
-  .nav{display:flex;gap:8px;margin-top:12px;align-items:center}
-  .btn{background:var(--accent);border:none;padding:10px 12px;border-radius:8px;color:#012;cursor:pointer}
-  .qbox{margin-top:14px;padding:12px;border-radius:8px;background:rgba(255,255,255,.02)}
-  .option{margin-top:8px}
-  .feedback{margin-top:8px}
-  .result{margin-top:12px;font-size:1.05rem}
-  footer{padding:12px;color:var(--muted);font-size:.9rem}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Simulador Práctico — Opciones (Pseudocódigo, Variables, etc.)</title>
+  <style>
+    body { font-family: sans-serif; background: #1a1f2d; color: #eef1fa; margin: 0; padding: 20px; }
+    .container { max-width: 900px; margin: 0 auto; }
+    .topic { background: #22304b; padding: 18px; border-radius: 8px; margin-bottom: 20px; }
+    .question { margin-top: 12px; padding: 14px; background: #2d3b60; border-radius: 6px; }
+    .option { margin-top: 8px; }
+    .btn { background: #38bdf8; border: none; padding: 10px 14px; border-radius: 6px; color: #012; cursor: pointer; }
+    .feedback { margin-top: 10px; font-size: 0.9em; }
+  </style>
 </head>
 <body>
-<header>
-  <h1>Simulador Parcial — PRÁCTICO (SEPARADO)</h1>
-  <div class="small">Formato: explicación por tema → preguntas de OPCIONES (10 por intento)</div>
-</header>
+  <div class="container">
+    <h1>Simulador Parcial Práctico — Modo Opciones</h1>
 
-<main>
-  <div class="wrap">
-    <div class="card">
-      <div id="slideArea" class="slide">
-        <!-- Fuentes de referencia (local): 
-             /mnt/data/2do parcial practica.pdf
-             /mnt/data/Clase08.pdf
-             /mnt/data/Clase10.pdf
-             /mnt/data/Clase11.pdf
-        -->
-        <h2 id="slideTitle">Bienvenido</h2>
-        <p id="slideText">Primero se muestra una explicación breve del tema; luego clic para ver varias preguntas relacionadas (todas MULTIPLE CHOICE).</p>
-      </div>
-
-      <div class="nav">
-        <button class="btn" id="prev">◀ Anterior</button>
-        <button class="btn" id="next">Siguiente ▶</button>
-        <button class="btn" id="toQ" style="margin-left:auto">Ir a preguntas del tema</button>
-      </div>
-
-      <div id="questionArea"></div>
-
-      <div class="nav" style="justify-content:flex-end;">
-        <button class="btn" id="start">Generar intento aleatorio (10)</button>
-        <button class="btn" id="submit" style="margin-left:8px">Corregir intento</button>
-      </div>
-
-      <div id="result" class="result"></div>
+    <div id="topicArea" class="topic">
+      <h2 id="topicTitle">Tema 1</h2>
+      <p id="topicText">Aquí va la explicación breve con pseudocódigo o definiciones del tema.</p>
     </div>
+
+    <div id="questionArea"></div>
+
+    <div style="margin-top: 20px">
+      <button id="btn-prev" class="btn">◀ Tema anterior</button>
+      <button id="btn-next" class="btn">Siguiente tema ▶</button>
+      <button id="btn-generate" class="btn">Generar 10 preguntas aleatorias</button>
+      <button id="btn-submit" class="btn">Corregir intento</button>
+    </div>
+
+    <div id="result" style="margin-top: 20px; font-size: 1.1em;"></div>
   </div>
-</main>
 
-<footer>Práctico en formato de opciones — cada intento elige 10 preguntas del banco.</footer>
+  <script>
+    const topics = [
+      {
+        id: 'pseudoc',
+        title: 'Pseudocódigo y estructuras de control',
+        text: 'Mientras (condición al inicio), Repetir...Hasta (condición al final), Para (contador con paso)...',
+        q: [
+          { q: '¿Qué valor tendrá i después de: Para i <- 2 Hasta 8 Con Paso 2?', opts: ['2,4,6,8','2,3,4,5,6,7,8','2,4,6','2,6,8'], ans: 0 },
+          { q: '¿Cuál es la ventaja de usar Repetir…Hasta que en pseudocódigo?', opts: ['Se ejecuta al menos una vez','Nunca se ejecuta','Es más rápido','Es más difícil de escribir'], ans: 0 },
+          { q: 'La estructura “Segun … Hacer” en pseudocódigo permite:', opts: ['Dos opciones máximo','Numerosas alternativas','Solo una alternativa','No tiene alternativas'], ans: 1 }
+        ]
+      },
+      {
+        id: 'memoria',
+        title: 'Memoria: particiones y fragmentación',
+        text: 'Particiones fijas / dinámicas, fragmentación interna / externa, segmentación.',
+        q: [
+          { q: '¿Qué ocurre si un proceso ocupa menos memoria que la partición asignada?', opts: ['Fragmentación externa','Fragmentación interna','Se libera la partición','Nada'], ans: 1 },
+          { q: '¿Qué tipo de particionamiento genera fragmentación externa?', opts: ['Fijo','Dinámico','Segmentación perfecta','Particionado estático'], ans: 1 },
+          { q: 'La segmentación ayuda al dividir un proceso en segmentos según:', opts: ['Tamaño fijo','Bloques contiguos','Segmentos lógicos (código, datos, pila)','Saltos de red'], ans: 2 }
+        ]
+      },
 
-<script>
-/* Banco práctico (OPCIONES) — extraído de tus PDFs. 
-   Cada tema incluye explicación + preguntas (todas MCQ).
-   El sistema generará 10 preguntas aleatorias por intento.
-*/
+      {
+        id: 'procesos',
+        title: 'Procesos y planificación de CPU',
+        text: 'Estados de procesos: listo, ejecución, bloqueado. Algoritmos: FIFO, SJF, RR, SRTF.',
+        q: [
+          { q: '¿Cuál algoritmo es expropiativo?', opts: ['FIFO','SJF','SRTF','FCFS'], ans: 2 },
+          { q: '¿Qué significa “quantum” en Round Robin?', opts: ['Tamaño de memoria','Tiempo asignado a cada proceso','Número de procesos','Tamaño del disco'], ans: 1 },
+          { q: '¿Qué problema puede ocurrir con SJF?', opts: ['Inanición de procesos largos','Uso excesivo de memoria','Fragmentación externa','Bucle infinito'], ans: 0 }
+        ]
+      },
 
-const topics = [
-  {
-    id:'compil',
-    title:'Compiladores — etapas y finalidad',
-    text:'Etapas: análisis léxico (tokeniza), sintáctico (parser), semántico (chequeos), generacion intermedia, optimización, generación de código objeto.',
-    q:[
-      {q:'¿Qué etapa convierte secuencia de caracteres en tokens?', opts:['Análisis sintáctico','Análisis léxico','Generación de código','Optimización'], ans:1},
-      {q:'¿Cuál etapa verifica tipos y coherencia semántica?', opts:['Análisis léxico','Generación de código','Análisis semántico','Optimización'], ans:2},
-      {q:'¿Cuál NO es ventaja típica de compiladores?', opts:['Ejecutables rápidos','Código fuente inaccesible','Facilidad para depurar línea a línea','Generar ejecutable'], ans:2}
-    ]
-  },
-  {
-    id:'pseudoc',
-    title:'Pseudocódigo y estructuras de control',
-    text:'Mientras (test al inicio), Repetir...Hasta (test al final), Para (contador), Segun (select multiple).',
-    q:[
-      {q:'¿Qué estructura es equivalente a Do...While?', opts:['Mientras','Repetir...Hasta que','Para','Segun'], ans:1},
-      {q:'Si se quiere repetir 5 veces, cuál usarías?', opts:['Repetir...Hasta','Mientras con contador','Para con paso','Segun'], ans:2},
-      {q:'Segun...Hacer es similar a:', opts:['if-else','switch/case','while','for'], ans:1}
-    ]
-  },
-  {
-    id:'mem',
-    title:'Memoria — fragmentación y particiones',
-    text:'Fragmentación interna: espacio desperdiciado dentro de una partición. Fragmentación externa: huecos entre bloques libres que no se pueden usar contiguamente.',
-    q:[
-      {q:'Fragmentación externa aparece típicamente en:', opts:['Particiones fijas','Particiones dinámicas','Segmentación perfecta','Cuando no hay procesos'], ans:1},
-      {q:'Fragmentación interna es:', opts:['Huecos entre bloques','Espacio no utilizado dentro de partición asignada','Debido a errores del compilador','Cuando el disco está lleno'], ans:1},
-      {q:'Segmentación divide procesos según:', opts:['Tamaño fijo','Segmentos lógicos (código, datos, pila)','Por prioridad','Por tiempo'], ans:1}
-    ]
-  },
-  {
-    id:'proc',
-    title:'Procesos y scheduling',
-    text:'Estados: listo, ejecución, bloqueado. Algoritmos: FIFO, SJF, SRTF (expropiativo), RR (quantum).',
-    q:[
-      {q:'¿Cuál algoritmo expropia por quantum?', opts:['FIFO','SJF','RR','FCFS'], ans:2},
-      {q:'SJF prioriza:', opts:['Procesos más largos','Procesos con mayor memoria','Procesos más cortos','Procesos por orden alfabético'], ans:2},
-      {q:'SRTF es:', opts:['No expropiativo','Expropiativo (tiempo restante)','Solo para E/S','Tipo de memoria'], ans:1}
-    ]
-  },
-  {
-    id:'e_s',
-    title:'E/S y drivers',
-    text:'Tipos: programada (CPU espera), por interrupciones (dispositivo avisa), DMA (transferencia sin intervención CPU). Drivers implementan registros de control/estado/datos.',
-    q:[
-      {q:'En E/S programada la CPU:', opts:['Espera activamente y consume CPU','No participa','Transfiere sin intervención','Controla solo disco'], ans:0},
-      {q:'El driver permite:', opts:['Que el SO interactúe con el dispositivo','Eliminar la necesidad de hardware','Que no haya errores','Aumentar TTL'], ans:0},
-      {q:'DMA es útil para:', opts:['Pequeñas transferencias byte a byte que usan CPU','Grandes transferencias sin afectar CPU','Evitar fragmentación','Aumentar prioridad del proceso'], ans:1}
-    ]
-  },
-  {
-    id:'redes',
-    title:'Redes — IP, TTL, fragmentación',
-    text:'Campos IP: TTL, Protocolo, Checksum, Identificador, Flags, Offset. TTL evita bucles; fragmentación usa identificador y offset para reensamblar.',
-    q:[
-      {q:'TTL se decrementa en:', opts:['Cada enrutador (salto)','Cada bit','Cada host final','No se modifica'], ans:0},
-      {q:'MF flag indica:', opts:['Último fragmento','Hay más fragmentos','No divisible','Checksum fallido'], ans:1},
-      {q:'Campo que distingue datagramas para reensamblado:', opts:['Identificador','Checksum','TTL','Protocolo'], ans:0}
-    ]
-  }
-];
+      // Podés agregar también temas de E/S y Redes hechos igual
+    ];
 
-// construir UI
-let topicIndex = 0;
-const slideTitle = document.getElementById('slideTitle');
-const slideText = document.getElementById('slideText');
-const slideArea = document.getElementById('slideArea');
-const questionArea = document.getElementById('questionArea');
-const resultDiv = document.getElementById('result');
+    let ti = 0; // topic index
+    let currentAttempt = []; // array de preguntas para intento
 
-function renderSlide(){
-  const t = topics[topicIndex];
-  slideTitle.textContent = `${topicIndex+1}. ${t.title}`;
-  slideText.textContent = t.text;
-  questionArea.innerHTML = `<div style="margin-top:10px;color:#9fbfd8">Este tema tiene ${t.q.length} preguntas asociadas. Podés revisar las preguntas con "Ir a preguntas".</div>`;
-}
+    function renderTopic() {
+      const t = topics[ti];
+      document.getElementById('topicTitle').textContent = t.title;
+      document.getElementById('topicText').textContent = t.text;
+      document.getElementById('questionArea').innerHTML = '';
+      document.getElementById('result').textContent = '';
+    }
 
-document.getElementById('prev').addEventListener('click', ()=>{
-  if(topicIndex>0) topicIndex--;
-  renderSlide();
-});
-document.getElementById('next').addEventListener('click', ()=>{
-  if(topicIndex < topics.length-1) topicIndex++;
-  renderSlide();
-});
+    document.getElementById('btn-prev').onclick = () => {
+      if (ti > 0) ti--;
+      renderTopic();
+    };
+    document.getElementById('btn-next').onclick = () => {
+      if (ti < topics.length - 1) ti++;
+      renderTopic();
+    };
 
-document.getElementById('toQ').addEventListener('click', ()=>{
-  const t = topics[topicIndex];
-  let html = `<h3>Preguntas del tema: ${t.title}</h3>`;
-  t.q.forEach((qq, i) => {
-    html += `<div class="qbox"><strong>${i+1}. ${qq.q}</strong>`;
-    qq.opts.forEach((o, j) => {
-      html += `<div class="option"><label><input type="radio" name="tq${i}" value="${j}"> ${o}</label></div>`;
-    });
-    html += `<div id="fb${i}" class="feedback"></div></div>`;
-  });
-  html += `<div style="margin-top:10px"><button class="btn" id="evalTopic">Corregir preguntas del tema</button></div>`;
-  questionArea.innerHTML = html;
-  document.getElementById('evalTopic').addEventListener('click', (e)=>{
-    e.preventDefault();
-    let c = 0;
-    t.q.forEach((qq,i)=>{
-      const sel = document.querySelector(`input[name=tq${i}]:checked`);
-      const fb = document.getElementById('fb'+i);
-      if(!sel){ fb.innerHTML = `<span style="color:#ff9ea6">Sin responder</span>`; return; }
-      if(parseInt(sel.value) === qq.ans){ fb.innerHTML = `<span style="color:#7dffa0">Correcto</span>`; c++; } else { fb.innerHTML = `<span style="color:#ff9ea6">Incorrecto</span>`; }
-    });
-    questionArea.innerHTML += `<div style="margin-top:8px">Resultado tema: ${c}/${t.q.length} → ${Math.round((c/t.q.length)*100)}%</div>`;
-  });
-});
+    document.getElementById('btn-generate').onclick = () => {
+      const allQs = [];
+      topics.forEach(t => t.q.forEach(q => allQs.push(q)));
+      // barajar
+      for (let i = allQs.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [allQs[i], allQs[j]] = [allQs[j], allQs[i]];
+      }
+      currentAttempt = allQs.slice(0, 10);
+      renderAttempt();
+    };
 
-// intento aleatorio (10 preguntas)
-function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+    function renderAttempt() {
+      let html = '';
+      currentAttempt.forEach((qq, idx) => {
+        html += `<div class="question"><strong>${idx+1}. ${qq.q}</strong>`;
+        qq.opts.forEach((opt, j) => {
+          html += `<div class="option"><label><input type="radio" name="aq${idx}" value="${j}"> ${opt}</label></div>`;
+        });
+        html += `<div id="fb${idx}" class="feedback"></div></div>`;
+      });
+      document.getElementById('questionArea').innerHTML = html;
+      document.getElementById('result').textContent = '';
+    }
 
-document.getElementById('start').addEventListener('click', ()=>{
-  // construir banco plano con referencias al topic
-  let flat = [];
-  topics.forEach((t,ti)=> t.q.forEach(q=> flat.push({topic:ti, q: q})));
-  flat = shuffle(flat);
-  const chosen = flat.slice(0, Math.min(10, flat.length));
-  let html = `<h3>Intento aleatorio — 10 preguntas</h3>`;
-  chosen.forEach((item, idx)=>{
-    html += `<div class="qbox"><strong>${idx+1}. ${item.q.q}</strong>`;
-    item.q.opts.forEach((o,j)=> html += `<div class="option"><label><input type="radio" name="IQ${idx}" value="${j}"> ${o}</label></div>`);
-    html += `<div id="IFB${idx}"></div></div>`;
-  });
-  questionArea.innerHTML = html;
-  resultDiv.textContent = '';
-  // store chosen for evaluate
-  window.currentAttempt = chosen;
-});
+    document.getElementById('btn-submit').onclick = (e) => {
+      e.preventDefault();
+      let correct = 0;
+      currentAttempt.forEach((qq, idx) => {
+        const sel = document.querySelector(`input[name=aq${idx}]:checked`);
+        const fb = document.getElementById('fb'+idx);
+        if (!sel) {
+          fb.textContent = 'No respondió.';
+        } else if (parseInt(sel.value) === qq.ans) {
+          fb.textContent = '✅ Correcto.';
+          correct++;
+        } else {
+          fb.textContent = '❌ Incorrecto.';
+        }
+      });
+      const percent = Math.round((correct / currentAttempt.length) * 100);
+      document.getElementById('result').textContent = `Puntaje: ${correct}/${currentAttempt.length} → ${percent}%`;
+    };
 
-document.getElementById('submit').addEventListener('click', (e)=>{
-  e.preventDefault();
-  const chosen = window.currentAttempt || [];
-  if(chosen.length === 0){ resultDiv.textContent = 'No hay intento generado.'; return; }
-  let correct = 0;
-  chosen.forEach((item, idx)=>{
-    const sel = document.querySelector(`input[name=IQ${idx}]:checked`);
-    const fb = document.getElementById('IFB'+idx);
-    if(!sel){ fb.innerHTML = `<div style="color:#ff9ea6">Sin responder</div>`; return; }
-    if(parseInt(sel.value) === item.q.ans){ fb.innerHTML = `<div style="color:#7dffa0">Correcto</div>`; correct++; }
-    else{ fb.innerHTML = `<div style="color:#ff9ea6">Incorrecto</div>`; }
-  });
-  const pct = Math.round((correct / chosen.length)*100);
-  resultDiv.textContent = `Resultado intento: ${correct}/${chosen.length} → ${pct}/100`;
-});
-
-// init
-renderSlide();
-</script>
+    // Inicial
+    renderTopic();
+  </script>
 </body>
 </html>
